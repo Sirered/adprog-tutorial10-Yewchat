@@ -19,3 +19,7 @@ This repository is divided to branches that correspond to the blog post sections
 * websockets - The code at the end of the Hello Websockets! section.
 * components-part2 - The code at the end of the Components-Phase 2 section.
 * websockets-part2 - The code at the end of the WebSockets-Phase 2 section.
+
+## Experiment 3.1: Original code
+
+![image](https://github.com/Sirered/adprog-tutorial10-Yewchat/assets/126568984/71a7c987-c2aa-4d49-8c04-1ed5173024cb)
