@@ -44,6 +44,7 @@ pub struct Chat {
     wss: WebsocketService,
     messages: Vec<MessageData>,
     _producer: Box<dyn Bridge<EventBus>>,
+    username: String,
 }
 impl Component for Chat {
     type Message = Msg;
@@ -76,6 +77,7 @@ impl Component for Chat {
             chat_input: NodeRef::default(),
             wss,
             _producer: EventBus::bridge(ctx.link().callback(Msg::HandleMsg)),
+            username: username.clone(),
         }
     }
 
@@ -92,7 +94,7 @@ impl Component for Chat {
                             .map(|u| UserProfile {
                                 name: u.into(),
                                 avatar: format!(
-                                    "https://avatars.dicebear.com/api/adventurer-neutral/{}.svg",
+                                    "https://api.dicebear.com/8.x/adventurer-neutral/svg?seed={}",
                                     u
                                 )
                                     .into(),
@@ -139,7 +141,7 @@ impl Component for Chat {
         let submit = ctx.link().callback(|_| Msg::SubmitMessage);
         html! {
             <div class="flex w-screen">
-                <div class="flex-none w-56 h-screen bg-gray-100">
+                <div class="flex-none w-56 h-screen bg-purple-100">
                     <div class="text-xl p-3">{"Users"}</div>
                     {
                         self.users.clone().iter().map(|u| {
@@ -168,7 +170,11 @@ impl Component for Chat {
                             self.messages.iter().map(|m| {
                                 let user = self.users.iter().find(|u| u.name == m.from).unwrap();
                                 html!{
-                                    <div class="flex items-end w-3/6 bg-gray-100 m-8 rounded-tl-lg rounded-tr-lg rounded-br-lg ">
+                                    <div class={if m.from == self.username {
+       "flex items-end w-3/6 bg-blue-200 m-8 rounded-tl-lg rounded-tr-lg rounded-br-lg self-end" // Sent message
+   } else {
+       "flex items-end w-3/6 bg-gray-100 m-8 rounded-tl-lg rounded-tr-lg rounded-br-lg" // Received message
+   }}>
                                         <img class="w-8 h-8 rounded-full m-3" src={user.avatar.clone()} alt="avatar"/>
                                         <div class="p-3">
                                             <div class="text-sm">
